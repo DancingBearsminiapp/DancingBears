@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: white;">$BearCoin Token</h1>
+        
+        <!-- Amount Input -->
+        <label for="amount">Enter Amount:</label>
+        <input style="width: 92%;" type="number" id="amount" placeholder="0.00" min="0" step="0.01">
+
+        <!-- From Token (Fixed to $CoinDrop) -->
+        <label for="from-token">From Token:</label>
+        <select id="from-token" disabled>
+            <option value="$CoinDrop">$BearCoin</option>
+        </select>
+
+        <!-- To Token (Fixed to USD) -->
+        <label for="to-token">To Token:</label>
+        <select id="to-token" disabled>
+            <option value="USD">( USDT )</option>
+        </select>
+
+        <!-- Exchange Button -->
+        <button onclick="calculateExchange()">Exchange</button>
+
+        <!-- Display Result -->
+        <p id="result">Price: 0.00 ( USDT )</p>
+    </div>
+    <div class="footer">
+        <a href="./index.html">Home</a>
+        <a href="../Token/Token.html">Token</a>
+            <a href="../Task/Task.html">Task</a>
+            <a href="../update/update.html">Update</a>
+            <a href="../account-page/account-page.html">Account</a>
+         </div>
+    <script src="./java.js"></script>
+</body>
+</html>

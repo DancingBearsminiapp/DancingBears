@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Countdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #4CAF50, #FF5722);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .countdown-container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            z-index: 1; /* Keep the container above the background */
+        }
+
+        #countdown {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allows boxes to wrap on smaller screens */
+            margin: 20px 0;
+        }
+
+        .time-box {
+            margin: 10px; /* Margin for spacing */
+            font-size: 2rem;
+            background-color: #ff8b2d;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 60px; /* Fixed width */
+            flex: 1 1 60px; /* Responsive flex property */
+            max-width: 80px; /* Max width for larger screens */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        #message {
+            font-size: 1.2rem;
+            color: #FF5722;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem; /* Smaller title on small screens */
+            }
+
+            .time-box {
+                font-size: 1.5rem; /* Smaller font for time boxes */
+                padding: 8px; /* Smaller padding */
+                width: 50px; /* Smaller width */
+                max-width: 60px; /* Max width adjustment */
+            }
+
+            #message {
+                font-size: 1rem; /* Smaller message font */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown-container">
+        <h1>Event Reward Countdown</h1>
+        <div id="countdown">
+            <div class="time-box" id="days"></div>
+            <div class="time-box" id="hours"></div>
+            <div class="time-box" id="minutes"></div>
+            <div class="time-box" id="seconds"></div>
+        </div>
+        <a href="file:///F:/CoinDrop-Project-1/index.html"><button style="border: 1px solid #ff8b2d; background-color: #ff8b2d; color: white; width: 80px; height: 40px; border-radius: 5px;">Back</button></a>
+        <p id="message"></p>
+    </div>
+    
+    <script>
+        const countdown = document.getElementById("countdown");
+        const message = document.getElementById("message");
+
+        // Set the event date to 12 days from now
+        const eventDate = new Date();
+        eventDate.setDate(eventDate.getDate() + 12);
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = eventDate - now;
+
+            if (timeDifference <= 0) {
+                clearInterval(countdownInterval);
+                countdown.style.display = "none";
+                message.innerText = "The event has started!";
+                return;
+            }
+
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = `${days} Days`;
+            document.getElementById("hours").innerText = `${hours} Hrs`;
+            document.getElementById("minutes").innerText = `${minutes} Min`;
+            document.getElementById("seconds").innerText = `${seconds} Sec`;
+        }
+
+        // Update countdown every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>

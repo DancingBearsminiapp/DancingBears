@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Main Dash-B</title>
+</head>
+<body>
+    <div class="container">
+        <div class="outer-container">
+            <div class="account-container">
+                <h2>Account</h2>
+                <p style="color: white;" id="username-display"> @Username</p>
+                <div class="display-group">
+                    <h6>Your Selected Wallet:</h6>
+                    <p id="display-wallet">No wallet selected</p>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="username-input" placeholder="@username">
+                    <button id="save-btn">save</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="wallet" placeholder="Enter wallet name">
+                    <button onclick="saveWallet()">Connect</button>
+                </div>
+                <h4 style="color: white;">More withdrawal Soon</h4>
+            </div>      
+        <div class="footer">
+            <a href="./index.html">Home</a>
+            <a href="../Token/Token.html">Token</a>
+            <a href="../Task/Task.html">Task</a>
+            <a href="../update/update.html">Update</a>
+            <a href="../account-page/account-page.html">Account</a>
+           </div>
+    </div>
+    <script src="./java.js"></script>
+</body>
+</html>

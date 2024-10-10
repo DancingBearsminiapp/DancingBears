@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin the Wheel</title>
+    <style>
+        /* Global styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background-color: #f9eee3;
+            height: 100vh;
+            margin: 0;
+            color: #ff6f3c;
+        }
+
+        .wheel-container {
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: 5px solid #ff6f3c;
+            border-radius: 50%;
+        }
+
+        /* Control styles */
+        .controls {
+            text-align: center;
+        }
+
+        button {
+            background-color: #ff6f3c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            canvas {
+                width: 300px;
+                height: 300px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            canvas {
+                width: 250px;
+                height: 250px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <canvas id="wheelCanvas"></canvas>
+    </div>
+    <div class="controls">
+        <button id="spinButton">Spin!</button>
+        <a href="file:///F:/CoinDrop-Project-1/index.html"><button id="spinButton">Back</button></a>
+        <p>Main Balance: <span id="mainBalance">0</span></p>
+        <p>Points Won: <span id="points">0</span></p>
+        <p>Spins Left: <span id="spinsLeft">3</span></p>
+        <p>Next Spin In: <span id="countdownTimer">Available now!</span></p>
+    </div>
+
+    <script>
+        const wheelCanvas = document.getElementById('wheelCanvas');
+        const spinButton = document.getElementById('spinButton');
+        const pointsDisplay = document.getElementById('points');
+        const mainBalanceDisplay = document.getElementById('mainBalance');
+        const spinsLeftDisplay = document.getElementById('spinsLeft');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const ctx = wheelCanvas.getContext('2d');
+
+        let points = 0;
+        let spinsLeft = 3;
+        let angle = 0;
+        let isSpinning = false;
+
+        const rewards = [
+            { label: "0.5", points: 0.5 },
+            { label: "1.0", points: 1.0 },
+            { label: "0.2", points: 0.2 },
+            { label: "0.01", points: 0.01 },
+            { label: "Double", points: "double" },
+            { label: "Triple", points: "triple" },
+            { label: "Broke", points: 0 }
+        ];
+
+        // Set the canvas size for responsiveness
+        function resizeCanvas() {
+            const size = Math.min(window.innerWidth, window.innerHeight) * 0.6;
+            wheelCanvas.width = size;
+            wheelCanvas.height = size;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Load from localStorage
+        function loadGameState() {
+            const savedSpinsLeft = localStorage.getItem('spinsLeft');
+            const savedPoints = localStorage.getItem('mainBalance');
+            const lastSpinTime = localStorage.getItem('lastSpinTime');
+
+            const now = new Date().getTime();
+
+            if (lastSpinTime) {
+                const hoursSinceLastSpin = (now - lastSpinTime) / (1000 * 60 * 60);
+                if (hoursSinceLastSpin >= 24) {
+                    spinsLeft = 3; // Reset spins after 24 hours
+                    localStorage.setItem('spinsLeft', spinsLeft);
+                } else if (savedSpinsLeft !== null) {
+                    spinsLeft = parseInt(savedSpinsLeft, 10);
+                }
+            }
+
+            if (savedPoints !== null) {
+                mainBalanceDisplay.innerText = savedPoints;
+            }
+            spinsLeftDisplay.innerText = spinsLeft;
+
+            // Start countdown timer
+            calculateTimeLeft();
+        }
+
+        // Save game state
+        function saveGameState() {
+            localStorage.setItem('spinsLeft', spinsLeft);
+            localStorage.setItem('mainBalance', mainBalanceDisplay.innerText);
+            localStorage.setItem('lastSpinTime', new Date().getTime());
+        }
+
+        // Show countdown timer
+        function calculateTimeLeft() {
+            const lastSpinTime = localStorage.getItem('lastSpinTime');
+
+            if (!lastSpinTime) {
+                countdownTimer.innerText = "Available now!";
+                return;
+            }
+
+            const now = new Date().getTime();
+            const timeSinceLastSpin = now - parseInt(lastSpinTime);
+            const timeLeft = 24 * 60 * 60 * 1000 - timeSinceLastSpin; // 24 hours in milliseconds
+
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                countdownTimer.innerText = `${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                countdownTimer.innerText = "Available now!";
+                spinsLeft = 3; // Reset spins
+                spinsLeftDisplay.innerText = spinsLeft;
+                spinButton.disabled = false; // Enable spin button
+                localStorage.setItem('spinsLeft', spinsLeft);
+                localStorage.setItem('lastSpinTime', now); // Reset last spin time
+            }
+        }
+
+        // Draw the wheel
+        function drawWheel() {
+            const wheelRadius = wheelCanvas.width / 2;
+            const sliceAngle = 2 * Math.PI / rewards.length;
+
+            rewards.forEach((reward, i) => {
+                const startAngle = i * sliceAngle;
+                const endAngle = (i + 1) * sliceAngle;
+
+                // Alternate slice colors
+                ctx.fillStyle = i % 2 === 0 ? '#f9eee3' : '#ff8b2d';
+                ctx.beginPath();
+                ctx.moveTo(wheelCanvas.width / 2, wheelCanvas.height / 2);
+                ctx.arc(wheelCanvas.width / 2, wheelCanvas.height / 2, wheelRadius, startAngle, endAngle);
+                ctx.fill();
+                
+                // Add text
+                ctx.save();
+                ctx.translate(wheelCanvas.width / 2, wheelCanvas.height / 2);
+                ctx.rotate(startAngle + sliceAngle / 2);
+                ctx.textAlign = "center";
+                ctx.fillStyle = "black";
+                ctx.font = `${wheelRadius / 10}px Arial`;
+                ctx.fillText(reward.label, wheelRadius / 2, 0);
+                ctx.restore();
+            });
+        }
+
+        // Spin the wheel
+        function spinWheel() {
+            if (spinsLeft > 0 && !isSpinning) {
+                isSpinning = true;
+                spinsLeft--;
+
+                const spinAngle = Math.random() * 2000 + 2000; // Random spin
+                let currentAngle = 0;
+                
+                const spinInterval = setInterval(() => {
+                    angle += 10; // Speed of rotation
+                    currentAngle += 10;
+                    drawRotatedWheel();
+
+                    if (currentAngle >= spinAngle) {
+                        clearInterval(spinInterval);
+                        isSpinning = false;
+                        determineReward();
+                        saveGameState(); // Save the state after the spin
+                    }
+                }, 10);
+
+                spinsLeftDisplay.innerText = spinsLeft;
+            }
+        }
+
+        // Draw the wheel at the current angle
+        function drawRotatedWheel() {
+            ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+            ctx.save();
+            ctx.translate(wheelCanvas.width / 2, wheelCanvas.height / 2);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.translate(-wheelCanvas.width / 2, -wheelCanvas.height / 2);
+            drawWheel();
+            ctx.restore();
+        }
+
+        // Determine the reward based on where the wheel stops
+        function determineReward() {
+            const sliceAngle = 360 / rewards.length;
+            const index = Math.floor(((angle % 360) / sliceAngle));
+            const reward = rewards[index];
+
+            let mainBalance = parseInt(mainBalanceDisplay.innerText, 10);
+
+            if (reward.points === "double") {
+                points *= 2;
+            } else if (reward.points === "triple") {
+                points *= 3;
+            } else {
+                points = reward.points;
+            }
+
+            mainBalance += points;
+            pointsDisplay.innerText = points;
+            mainBalanceDisplay.innerText = mainBalance;
+        }
+
+        // Attach event listeners
+        spinButton.addEventListener('click', spinWheel);
+
+        // Initialize the wheel and game state
+        drawWheel();
+        loadGameState();
+
+        // Update countdown every second
+        setInterval(calculateTimeLeft, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral System with Daily Limit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9eee3;
+        }
+        .container{
+            padding: 10px;
+            border: 1px solid #ff8d2d;
+            background-color: #ff8d2d;
+           text-align: center;
+           color: white;
+           border-radius: 10px;
+        }
+        h1, h2 {
+            color: #f9eee3;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #f9eee3;
+            color: #ff8d2d;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #ff8d2d;
+        }
+        input {
+            margin-top: 10px;
+            padding: 8px;
+            width: 80%;
+            border-radius: 5px;
+            border-color: #ff8d2d;
+        }
+        #message {
+            margin-top: 15px;
+            color: #f9eee3;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Invite Your Friends and Earn More with DancingBears🧸</h1>
+
+    <div>
+        <h2>Your Invite Link</h2>
+        <p id="invite-link"></p>
+        <button id="share-button">Share Invite Link</button>
+    </div>
+
+    <div>
+        <p id="referral-count"></p>
+    </div>
+
+    <div>
+        <h2>Submit a Username to Earn $BearCoin</h2>
+        <input type="text" id="username-input" placeholder="Enter your username" />
+        <input type="text" id="submit-invite-link" placeholder="Paste an invite link ending with DancingBears" />
+        <button id="submit-link-button">Submit Invite Link</button>
+        <a href="file:///F:/CoinDrop-Project-1/index.html"><button id="submit-link-button">Back</button></a>
+    </div>
+
+    <div>
+        <p id="main-balance"></p>
+    </div>
+
+    <div id="message"></div> <!-- Message display area -->
+</div>
+    <script>
+        const userId = "DancingBears"; // Define the suffix for the invite link
+        const inviteLink = `ref=${userId}`;
+        document.getElementById('invite-link').textContent = inviteLink;
+
+        // Function to update referral count
+        function updateReferralCount() {
+            let count = parseInt(localStorage.getItem('referralCount')) || 0;
+            count++;
+            localStorage.setItem('referralCount', count);
+            return count;
+        }
+
+        // Function to update main balance
+        function updateMainBalance(points) {
+            let currentBalance = parseFloat(localStorage.getItem('mainBalance')) || 0.00;
+            currentBalance += points;
+            localStorage.setItem('mainBalance', currentBalance.toFixed(2));
+            return currentBalance;
+        }
+
+        // Display referral count
+        function displayReferralCount() {
+            const count = localStorage.getItem('referralCount') || 0;
+            document.getElementById('referral-count').textContent = `You have referred ${count} users.`;
+        }
+
+        // Display main balance
+        function displayMainBalance() {
+            const balance = localStorage.getItem('mainBalance') || '0.00';
+            document.getElementById('main-balance').textContent = `$BearCoin ${parseFloat(balance).toFixed(2)} points`;
+        }
+
+        // Check if the username has already earned points
+        function hasUserEarnedPoints(username) {
+            const earnedUsers = JSON.parse(localStorage.getItem('earnedUsers')) || {};
+            return earnedUsers[username] || false;
+        }
+
+        // Mark the user as having earned points
+        function markUserAsEarned(username) {
+            const earnedUsers = JSON.parse(localStorage.getItem('earnedUsers')) || {};
+            earnedUsers[username] = true;
+            localStorage.setItem('earnedUsers', JSON.stringify(earnedUsers));
+        }
+
+        // Check if the user has reached their daily limit
+        function checkDailyLimit() {
+            const lastInviteDate = localStorage.getItem('lastInviteDate');
+            const inviteCount = parseInt(localStorage.getItem('dailyInviteCount')) || 0;
+
+            // If there is no invite record, allow invites
+            if (!lastInviteDate) {
+                localStorage.setItem('dailyInviteCount', '0');
+                return true;
+            }
+
+            const now = new Date();
+            const lastDate = new Date(lastInviteDate);
+            const hoursDiff = Math.abs(now - lastDate) / 36e5; // Difference in hours
+
+            // Reset daily count if 24 hours have passed
+            if (hoursDiff >= 24) {
+                localStorage.setItem('dailyInviteCount', '0');
+                localStorage.setItem('lastInviteDate', now.toISOString());
+                return true;
+            }
+
+            // Allow if the invite count is less than 10
+            return inviteCount < 10;
+        }
+
+        // Function to display messages on the screen
+        function displayMessage(message) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            setTimeout(() => {
+                messageDiv.textContent = ''; // Clear message after 5 seconds
+            }, 5000);
+        }
+
+        // Initial Display
+        displayReferralCount();
+        displayMainBalance();
+
+        // Share Invite Link
+        document.getElementById('share-button').onclick = function() {
+            navigator.clipboard.writeText(inviteLink).then(() => {
+                displayMessage('Invite link copied to clipboard!');
+            });
+        };
+
+        // Submit Username and Invite Link
+        document.getElementById('submit-link-button').onclick = function() {
+            const username = document.getElementById('username-input').value.trim();
+            const submittedLink = document.getElementById('submit-invite-link').value.trim();
+            
+            if (submittedLink.endsWith('DancingBears')) {
+                if (!username) {
+                    displayMessage('Please enter a username.');
+                    return;
+                }
+
+                // Check if the user can invite
+                if (!checkDailyLimit()) {
+                    displayMessage('You have reached your daily limit of 10 invites. Please wait 24 hours before inviting more friends.');
+                    return;
+                }
+
+                if (!hasUserEarnedPoints(username)) {
+                    markUserAsEarned(username);
+                    const newCount = updateReferralCount();
+                    const newBalance = updateMainBalance(2.00);
+                    
+                    // Update daily invite count
+                    const dailyInviteCount = parseInt(localStorage.getItem('dailyInviteCount')) || 0;
+                    localStorage.setItem('dailyInviteCount', (dailyInviteCount + 1).toString());
+
+                    // Update the last invite date if it’s the first invite of the day
+                    if (dailyInviteCount === 0) {
+                        localStorage.setItem('lastInviteDate', new Date().toISOString());
+                    }
+
+                    displayMessage(`Submitted link is valid! invite count updated to ${newCount}. 2.00 $BearCoin added to your balance.`);
+                } else {
+                    displayMessage('You have already earned $BearCoin for this link with this username.');
+                }
+                
+                document.getElementById('username-input').value = ''; // Clear username input
+                document.getElementById('submit-invite-link').value = ''; // Clear link input
+            } else {
+                displayMessage('Invalid invite link! Please enter a link that ends with "DancingBears".');
+            }
+        };
+    </script>
+</body>
+</html>

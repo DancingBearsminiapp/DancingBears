@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Disable user scaling to prevent zoom */
+body {
+    -webkit-touch-callout: none; /* Prevent long press menu on iOS */
+    -webkit-user-select: none; /* Prevent text selection */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Disable touch interactions */
+}
+
+/* Ensure button image does not zoom */
+button img {
+    pointer-events: none; /* Ensure no interaction with the image directly */
+    user-select: none; /* Prevent selecting the image */
+}
+* {
+    -webkit-tap-highlight-color: transparent; /* Remove tap feedback */
+    touch-action: manipulation; /* Disables double-tap zoom on mobile devices */
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9eee3; /* Blue background */
+    color: #ff8b2d;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.coin-display {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.coin-icon {
+    width: 55%; /* Responsive width */
+    max-width: 70px; /* Set maximum size */
+    margin-right: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* For better responsiveness */
+}
+
+.btn {
+    background-color: #ff8b2d; /* Yellow color */
+    border: none;
+    padding: 10px 12px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    flex: 1 1 40%; /* Responsive width */
+    max-width: 150px; /* Max width */
+}
+
+.piggy-bank {
+    margin-bottom: 10px;
+}
+
+.piggy-img {
+    width: 100%; /* Responsive size */
+    max-width: 50%; /* Set maximum size */
+    height: auto;
+}
+
+.timer {
+    background-color: white;
+    color: black;
+    padding: 15px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    width: 90%; /* Responsive width */
+    max-width: 400px; /* Max width */
+}
+
+.footer {
+    background-color: #ff8b2d;
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    border-radius: 10px;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.container-1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .points-display {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #ff8b2d;
+    color: white;
+    border-color: #ff8b2d;
+    border-radius: 10px;
+  }
+  .progress-bar {
+    width: 100%;
+    background-color:#ff8b2d;
+    margin: 20px 0;
+  }
+  .progress {
+    width: 0%;
+    height: 20px;
+    background-color: #FFCC33;
+  }
+  .timer-display {
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+
+  #claimBtn, #startBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    border: 1px solid #FF8D2D;
+    background-color: #FF8D2D;
+    border-radius: 5px;
+    color: white;
+}
+#powerUpdateLink {
+    display: block;
+    margin-top: 30px;
+    font-size: 18px;
+    padding: 10px;
+    text-decoration: none;
+    border: 1px solid #FF8D2D;
+    background-color: #FF8D2D;
+    border-radius: 5px;
+    color: white;
+}
+
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('./icon-images/DancingBears\ \(3\).png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .loader {
+    border: 6px solid rgba(255, 255, 255, 0.2); /* Light border */
+    border-radius: 50%;
+    border-top: 6px solid #fff; /* Color of the loader */
+    width: 10vw; /* Loader size is 10% of the viewport width */
+    height: 10vw; /* Ensures loader is always circular */
+    max-width: 80px; /* Max size for larger screens */
+    max-height: 80px;
+    min-width: 40px; /* Minimum size for smaller screens */
+    min-height: 40px;
+    animation: spin 1.5s linear infinite; /* Slightly faster spin */
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+/* Media Queries for different screen sizes */
+
+/* For tablets (portrait and landscape) */
+@media (min-width: 600px) {
+    .coin-display {
+        font-size: 2.5rem;
+    }
+
+    .btn {
+        font-size: 1.2rem;
+    }
+
+    .timer {
+        font-size: 1.5rem;
+    }
+}
+
+/* For larger screens (desktops and laptops) */
+@media (min-width: 992px) {
+    .coin-display {
+        font-size: 3rem;
+    }
+
+    .btn {
+        font-size: 1.3rem;
+        padding: 15px 25px;
+    }
+
+    .piggy-img {
+        width: 25%;
+    }
+
+    .timer {
+        font-size: 1.8rem;
+    }
+}
+
+/* For extra large screens */
+@media (min-width: 1200px) {
+    .coin-display {
+        font-size: 4rem;
+    }
+
+    .btn {
+        font-size: 1.5rem;
+    }
+
+    .timer {
+        font-size: 2rem;
+    }
+}

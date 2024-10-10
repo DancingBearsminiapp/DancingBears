@@ -1,0 +1,202 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9eee3; /* Blue background */
+    color: #ff8b2d;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.footer {
+    background-color: #ff8b2d;
+    right: 1px;
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    border-radius: 10px;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.outer-container {
+    background-color: #f9eee3;
+    padding: 0px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.account-container {
+    background-color: #ff8b2d;
+    padding: 30px 20px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+}
+
+h2 {
+    font-size: 26px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    color: white;
+}
+
+h2:after {
+    content: '';
+    display: block;
+    width: 50px;
+    margin: 10px auto;
+    border-bottom: 2px solid rgb(255, 255, 255);
+}
+
+p {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background-color: white;
+}
+
+.input-group button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    padding: 0 20px;
+    border-radius: 0 30px 30px 0;
+    background-color: white;
+    color: #FF851B;
+    border: 0.1px solid #FF851B;
+    cursor: pointer;
+}
+
+.input-group button:hover {
+    background-color: #FF851B;
+    color: white;
+}
+
+        /* Style for the input and button group */
+        .input-group {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #wallet {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 24px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Style for displaying selected wallet */
+        .display-group {
+            margin-top: -30px;
+        }
+        
+        #display-wallet {
+            font-size: 10px;
+            color: white;
+        }
+
+/* For tablets (portrait and landscape) */
+@media (min-width: 600px) {
+    .coin-display {
+        font-size: 2.5rem;
+    }
+
+    .btn {
+        font-size: 1.2rem;
+    }
+
+    .timer {
+        font-size: 1.5rem;
+    }
+}
+
+/* For larger screens (desktops and laptops) */
+@media (min-width: 992px) {
+    .coin-display {
+        font-size: 3rem;
+    }
+
+    .btn {
+        font-size: 1.3rem;
+        padding: 15px 25px;
+    }
+
+    .piggy-img {
+        width: 25%;
+    }
+
+    .timer {
+        font-size: 1.8rem;
+    }
+}
+
+/* For extra large screens */
+@media (min-width: 1200px) {
+    .coin-display {
+        font-size: 4rem;
+    }
+
+    .btn {
+        font-size: 1.5rem;
+    }
+
+    .timer {
+        font-size: 2rem;
+    }
+}
