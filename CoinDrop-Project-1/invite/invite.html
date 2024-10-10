@@ -35,6 +35,7 @@
         }
         button:hover {
             background-color: #ff8d2d;
+            color: #f9eee3;
         }
         input {
             margin-top: 10px;
@@ -69,7 +70,7 @@
         <input type="text" id="username-input" placeholder="Enter your username" />
         <input type="text" id="submit-invite-link" placeholder="Paste an invite link ending with DancingBears" />
         <button id="submit-link-button">Submit Invite Link</button>
-        <a href="https://dancingbearsminiapp.github.io/DancingBears"><button id="submit-link-button">Back</button></a>
+        <a href="file:///F:/CoinDrop-Project-1/index.html"><button id="back-button">Back</button></a>
     </div>
 
     <div>
@@ -82,6 +83,9 @@
         const userId = "DancingBears"; // Define the suffix for the invite link
         const inviteLink = `ref=${userId}`;
         document.getElementById('invite-link').textContent = inviteLink;
+
+        // Track whether the user has shared the invite link
+        let hasShared = false;
 
         // Function to update referral count
         function updateReferralCount() {
@@ -165,16 +169,22 @@
 
         // Share Invite Link
         document.getElementById('share-button').onclick = function() {
-            navigator.clipboard.writeText(inviteLink).then(() => {
-                displayMessage('Invite link copied to clipboard!');
-            });
+            const telegramLink = `https://t.me/share/url?url=https://t.me/DancingBears_bot&text=Join%20DancingBears%20and%20earn%20$BearCoin%20by%20using%20my%20referral%20link!%20ref=${userId}`;
+            window.open(telegramLink, '_blank'); // Open Telegram share link in a new tab
+            hasShared = true; // Set the flag to true after sharing
         };
 
         // Submit Username and Invite Link
         document.getElementById('submit-link-button').onclick = function() {
             const username = document.getElementById('username-input').value.trim();
             const submittedLink = document.getElementById('submit-invite-link').value.trim();
-            
+
+            // Ensure the user has shared before claiming points
+            if (!hasShared) {
+                displayMessage('You must share the invite link before claiming points.');
+                return;
+            }
+
             if (submittedLink.endsWith('DancingBears')) {
                 if (!username) {
                     displayMessage('Please enter a username.');
@@ -201,17 +211,19 @@
                         localStorage.setItem('lastInviteDate', new Date().toISOString());
                     }
 
-                    displayMessage(`Submitted link is valid! invite count updated to ${newCount}. 2.00 $BearCoin added to your balance.`);
+                    displayMessage(`Submitted link is valid! Invite count updated to ${newCount}. 2.00 $BearCoin added to your balance.`);
                 } else {
                     displayMessage('You have already earned $BearCoin for this link with this username.');
                 }
-                
-                document.getElementById('username-input').value = ''; // Clear username input
-                document.getElementById('submit-invite-link').value = ''; // Clear link input
+
+                // Clear inputs and reset share flag after submission
+                document.getElementById('username-input').value = ''; 
+                document.getElementById('submit-invite-link').value = ''; 
+                hasShared = false; // Reset the share flag after claiming points
             } else {
                 displayMessage('Invalid invite link! Please enter a link that ends with "DancingBears".');
             }
         };
     </script>
-</body>
+</body>  
 </html>
