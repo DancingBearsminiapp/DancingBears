@@ -1,7 +1,7 @@
 let tasks = [
-    { text: "X - Twitter Follow ", isClaimed: false, isHidden: false, link: "https://x.com/CoinDrop_oi?t=8Oj3VNgImU67_rdrSPCXMg&s=09" },
+    { text: "X - Twitter Follow ", isClaimed: false, isHidden: false, link: "https://x.com/DancingBears_oi?t=rfXSsMYJCk_lglTdJpku3g&s=09" },
     { text: "Youtube Subscribe", isClaimed: false, isHidden: false, link: "https://youtube.com/@coindrop-bot?si=vqmdhH3vZIRYaP4n" },
-    { text: "Join Our Unity Telegram", isClaimed: false, isHidden: false, link: "http://t.me/CoinDropsUnity" },
+    { text: "Join Our Community Telegram", isClaimed: false, isHidden: false, link: "https://t.me/DancingBearsCommunity" },
     { text: "Youtube Videos Watch", isClaimed: false, isHidden: false, link: "https://youtu.be/-ZCDHsthNMQ?si=NvLDDryoXZqrrFnA" },
     { text: "MAJOR Bot Join us", isClaimed: false, isHidden: false, link: "https://t.me/major/start?startapp=5871495451" },
     { text: "Blum Bot Join us ", isClaimed: false, isHidden: false, link: "https://t.me/blum/app?startapp=ref_BzrEQ6OQyy" },
